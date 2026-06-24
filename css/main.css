@@ -7,9 +7,16 @@ header
     height: 10vh;
 
     padding: 5px 15px;
-    border-bottom: solid 1px #e17055;
-    box-shadow: 5px 2px #e17055;
-    background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+    border-bottom: solid 1px #94bbe9;
+    box-shadow: 5px 2px #94bbe9;
+
+    background: #EEAECA;
+    background: radial-gradient(
+        circle,
+        rgba(238, 174, 202, 1) 0%,
+        rgba(148, 187, 233, 1) 100%
+    );
+
     color: #2d3436;
 }
 
@@ -148,10 +155,14 @@ main > .content-form .cart-item
     border: solid 1px #ccc;
 }
 
+.product .product-name {
+    font-weight: bold;
+}
+
 .product .price
 {
     font-weight: 900;
-    color: #e17055;
+    color: #d63384;
 }
 
 .modal-body img
