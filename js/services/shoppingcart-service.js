@@ -196,36 +196,68 @@ class ShoppingCartService {
     checkout() {
         const url = `${config.baseUrl}/orders`;
 
+        const cartItems = [...this.cart.items];
+        const cartTotal = this.cart.total;
+
         axios.post(url)
             .then(response => {
+
                 this.cart = { items: [], total: 0 };
                 this.updateCartDisplay();
+
+                const order = response.data;
+
+                let itemsHtml = cartItems.map(item => `
+                    <tr>
+                        <td>${item.product.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>$${item.product.price}</td>
+                        <td>$${(item.product.price * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `).join('');
 
                 const main = document.getElementById("main");
                 main.innerHTML = `
                     <div class="content-form">
-                        <h2>Order placed successfully!</h2>
-                        <p>Your order ID is: ${response.data.orderId}</p>
+                        <h2>Order Placed Successfully!</h2>
+                        <p><strong>Order ID:</strong> ${order.orderId}</p>
+                        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        <p><strong>Shipping to:</strong> ${order.address}, ${order.city}, ${order.state} ${order.zip}</p>
+                        <hr>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>${itemsHtml}</tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"><strong>Shipping</strong></td>
+                                    <td>$${order.shippingAmount}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Total</strong></td>
+                                    <td><strong>$${cartTotal.toFixed(2)}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                         <a href="index.html" class="btn btn-primary">Continue Shopping</a>
                     </div>
                 `;
             })
             .catch(error => {
-                const data = {
-                    error: "Checkout failed. Please try again."
-                };
+                const data = { error: "Checkout failed. Please try again." };
                 templateBuilder.append("error", data, "errors");
             });
     }
 
 
 
-
-
-
 }
-
-
 
 
 
